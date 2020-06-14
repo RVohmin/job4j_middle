@@ -1,5 +1,8 @@
 package ru.job4j;
 
+/**
+ * Test class for experiments from lessons
+ */
 public class Test extends Thread {
     public void run() {
         System.out.println("I’m " + this.getName());
@@ -8,6 +11,9 @@ public class Test extends Thread {
     String name1 = "Оля";
     String name2 = "Лена";
 
+    /**
+     * replaced reference value
+     */
     public void swap() {
         synchronized (this) {
             String s = name1;
