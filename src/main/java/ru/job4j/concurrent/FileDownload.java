@@ -6,18 +6,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Simulation of loading process
- * Note! In block catch must be interrupt thread
- */
-public class Wget {
-    /**
-     * Get size file at URL
-     *
-     * @param http - String url
-     * @return Long size of file in bytes
-     * @throws IOException
-     */
+public class FileDownload {
     private long getSizeFile(String http) throws IOException {
         URL url = new URL(http);
         HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
@@ -25,36 +14,31 @@ public class Wget {
         return httpConnection.getContentLengthLong();
     }
 
-    /**
-     * Method prints in console download progress
-     *
-     * @param size        size of downloading file
-     * @param currentSize - current size downloaded file
-     * @param speed       - speed of downloading in bytes per msec
-     * @throws InterruptedException
-     */
-    private void progressPrint(long size, long currentSize, int speed) throws InterruptedException {
+    private void progressPrint(long size, long currentSize) {
+//        Thread thread = new Thread(
+//                () -> {
+//                    for (int i = 0; i <= (currentSize / size) * 100; i++) {
+//                        System.out.print("\rLoading progress: " + i + "%");
+//                        try {
+//                            Thread.sleep(50);
+//                        } catch (InterruptedException e) {
+//                            Thread.currentThread().interrupt();
+//                        }
+//                    }
+//                    System.out.println("\nLoading success! Congratulation!");
+//                }
+//        );
+//        thread.start();
         int progress = (int) ((currentSize * 100 / size));
-        System.out.print("\rLoading progress: "
-                .concat(String.valueOf(progress))
-                .concat("%")
-                .concat(" Download speed: ")
-                .concat(String.valueOf(speed)));
+        System.out.print("\rLoading progress: " + progress + "%");
     }
 
-    /**
-     * Method downloading file, after download must be renamed^ default name - file.txt
-     *
-     * @param url   - String with path to file for download
-     * @param speed - limit speed for download
-     * @throws IOException
-     */
-    public void fileDownload(String url, int speed, String destFileName) throws IOException {
+    public void fileDownload(String url, int speed) throws IOException {
         int kb = 1024;
         long size = getSizeFile(url);
         speed = speed * kb / 1000; // скорость байт / мсек
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(destFileName)) {
+             FileOutputStream fileOutputStream = new FileOutputStream("car.jpg")) {
             byte[] dataBuffer = new byte[kb];
             int bytesRead;
             int sumBytes = 0;
@@ -74,7 +58,7 @@ public class Wget {
                     int delay = (currentSpeed / speed) * 1000;
                     Thread.sleep(delay);
                 }
-                progressPrint(size, sumBytes, currentSpeed);
+                progressPrint(size, sumBytes);
             }
             System.out.println();
             System.out.println("Total downloaded: " + (sumBytes / kb) + " Kb");
@@ -83,16 +67,10 @@ public class Wget {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 3) {
-            throw new IllegalStateException("Number of arguments must be 3: url speed destFileName");
-        }
-        String url = args[0];
-        int speed = Integer.parseInt(args[1]);
-        String destFileName = args[2];
 
-        Wget wget = new Wget();
-        wget.fileDownload(url, speed, destFileName);
-
+    public static void main(String[] args) throws Exception {
+        FileDownload fileDownload = new FileDownload();
+        fileDownload.fileDownload("https://s1.1zoom.ru/b5050/458/294916-svetik_1920x1200.jpg", 150);
     }
+
 }

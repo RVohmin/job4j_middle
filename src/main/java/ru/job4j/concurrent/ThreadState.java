@@ -5,7 +5,7 @@ package ru.job4j.concurrent;
  * Нить main должна дождаться завершения этих нитей и вывести на консоль сообщение, что работа завершена.
  */
 public class ThreadState {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Thread first = new Thread(
                 () -> {
                     System.out.println("Thread first start");

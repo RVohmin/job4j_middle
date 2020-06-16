@@ -11,7 +11,7 @@ public class ThreadSleep {
                 () -> {
                     try {
                         System.out.println("Start loading ... ");
-                        Thread.sleep(3000);
+                        Thread.sleep(1000);
                         System.out.println("Loaded.");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
