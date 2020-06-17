@@ -15,7 +15,12 @@ package ru.job4j.resources;
  */
 
 public class Cache {
-    private static Cache instOf() {
-        return new Cache();
+    private static Cache cache;
+
+    public synchronized static Cache instOf() {
+        if (cache == null) {
+            cache = new Cache();
+        }
+        return cache;
     }
 }
