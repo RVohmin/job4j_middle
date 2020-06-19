@@ -1,16 +1,11 @@
 package ru.job4j.synchronize;
 
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
-
 import java.util.Objects;
 
-@ThreadSafe
 public class User {
     private final int id;
 
-    @GuardedBy("this")
-    private volatile int amount;
+    private int amount;
 
     public User(int id, int amount) {
         this.id = id;
@@ -25,7 +20,7 @@ public class User {
         return amount;
     }
 
-    public synchronized void setAmount(int amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
