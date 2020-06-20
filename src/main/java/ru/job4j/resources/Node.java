@@ -1,6 +1,6 @@
 package ru.job4j.resources;
 
-import net.jcip.annotations.NotThreadSafe;
+import net.jcip.annotations.Immutable;
 
 /**
  * 1. Ниже приведет код не потокобезопасного класса описывающего узел односвязанного списка.
@@ -8,7 +8,7 @@ import net.jcip.annotations.NotThreadSafe;
  *
  * @param <T> - Type of Node value
  */
-@NotThreadSafe
+@Immutable
 public class Node<T> {
     private final Node<T> next;
     private final T value;
