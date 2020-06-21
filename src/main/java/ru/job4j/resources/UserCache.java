@@ -27,6 +27,5 @@ public class UserCache {
             user.add(User.of(item.getValue().getName()));
         }
         return user;
-//        return new ArrayList<>(users.values());
     }
 }
