@@ -5,9 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class CountTest {
-    /**
-     * Класс описывает нить со счетчиком.
-     */
+
     private class ThreadCount extends Thread {
         private final Count count;
 
