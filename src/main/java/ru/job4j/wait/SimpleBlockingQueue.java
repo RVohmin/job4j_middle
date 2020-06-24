@@ -11,9 +11,14 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
+
     private final Object monitor = this;
     private int count = 0;
     boolean flag = true;
+
+    public synchronized boolean getPeek() {
+        return queue.peek() != null;
+    }
 
     public void on() {
         synchronized (monitor) {
@@ -29,7 +34,7 @@ public class SimpleBlockingQueue<T> {
         }
     }
 
-    public void check() {
+    public void checkProduce() {
         synchronized (Thread.currentThread()) {
             while (!flag) {
                 try {
@@ -42,22 +47,36 @@ public class SimpleBlockingQueue<T> {
         }
     }
 
-    public synchronized void offers(T value) {
+    public void checkConsume() {
+        synchronized (Thread.currentThread()) {
+            while (flag) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + " sleep");
+                    monitor.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    public synchronized void offer(T value) {
         if (count >= 3) {
             off();
         }
-        check();
+        checkProduce(); //while false - sleep
         queue.offer(value);
         count++;
-        System.out.println("Добавлено " + value);
+        System.out.println("Добавлено " + value + " count = " + count + " flag = " + flag + " peek " + queue.peek());
     }
 
     public synchronized T poll() {
-        T value = queue.poll();
-        count--;
         if (queue.peek() == null) {
             on();
         }
+        checkConsume(); //while true == sleep
+        T value = queue.poll();
+        count--;
         return value;
     }
 }

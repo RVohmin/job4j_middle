@@ -11,9 +11,11 @@ public class SimpleBlockingQueueTest {
                 () -> {
                     var i = 1;
                     while (i <= 12) {
-                        queue.offers(i);
+                        queue.offer(i);
                         i++;
                     }
+                    queue.off();
+                    System.out.println("Producer final");
                 }, "Производитель (offer)"
         );
 
@@ -26,9 +28,11 @@ public class SimpleBlockingQueueTest {
                     }
                 }, "Потребитель (poll)"
         );
+
         produser.start();
         consumer.start();
         produser.join();
+
         consumer.join();
     }
 
