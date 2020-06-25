@@ -32,7 +32,6 @@ public class CountBarrier {
                     Thread.currentThread().interrupt();
                 }
             }
-            monitor.notifyAll();
         }
     }
 
