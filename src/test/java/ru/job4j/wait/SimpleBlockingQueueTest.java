@@ -5,7 +5,7 @@ import org.junit.Test;
 public class SimpleBlockingQueueTest {
     @Test
     public void blockingQueue() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(4);
 
         Thread produser = new Thread(
                 () -> {
@@ -14,8 +14,8 @@ public class SimpleBlockingQueueTest {
                         queue.offer(i);
                         i++;
                     }
-                    queue.off();
-                    System.out.println("Producer final");
+                    queue.wakeUpThreads();
+                    System.out.println("Producer is dead");
                 }, "Производитель (offer)"
         );
 
@@ -26,6 +26,7 @@ public class SimpleBlockingQueueTest {
                         System.out.println("Получено " + queue.poll());
                         i++;
                     }
+                    System.out.println("Consumer is dead");
                 }, "Потребитель (poll)"
         );
         produser.start();

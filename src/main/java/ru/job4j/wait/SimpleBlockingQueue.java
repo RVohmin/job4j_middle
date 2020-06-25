@@ -10,70 +10,64 @@ import java.util.Queue;
 public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
-
+    @GuardedBy("this")
     private final Object monitor = this;
+    private final int maxSizeQueue;
     private int count = 0;
-    private boolean flag = true;
 
-    public synchronized boolean getPeek() {
-        return queue.peek() != null;
+    public SimpleBlockingQueue(int maxSizeQueue) {
+        this.maxSizeQueue = maxSizeQueue;
     }
 
-    public void on() {
-        synchronized (monitor) {
-            flag = true;
-            monitor.notifyAll();
-        }
+    public synchronized boolean isEmptyQueue() {
+        return queue.size() == 0;
     }
 
-    public void off() {
-        synchronized (monitor) {
-            flag = false;
-            monitor.notifyAll();
-        }
+    public synchronized boolean isFullQueue() {
+        return queue.size() == maxSizeQueue;
     }
 
-    public void checkProduce() {
-        synchronized (Thread.currentThread()) {
-            while (!flag) {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " sleep");
-                    monitor.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    public synchronized void wakeUpThreads() {
+        monitor.notifyAll();
+    }
+
+    public synchronized void ifFullQueueThenWait() {
+        while (isFullQueue()) {
+            try {
+                System.out.println(Thread.currentThread().getName() + " sleep");
+                monitor.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
 
-    public void checkConsume() {
-        synchronized (Thread.currentThread()) {
-            while (flag) {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " sleep");
-                    monitor.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    public synchronized void ifEmptyQueueThenWait() {
+        while (isEmptyQueue()) {
+            try {
+                System.out.println(Thread.currentThread().getName() + " sleep");
+                monitor.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
 
     public synchronized void offer(T value) {
-        if (count >= 3) {
-            off();
+        if (isFullQueue()) {
+            wakeUpThreads();
         }
-        checkProduce(); //while false - sleep
+        ifFullQueueThenWait();
         queue.offer(value);
         count++;
-        System.out.println("Добавлено " + value + " count = " + count + " flag = " + flag + " peek " + queue.peek());
+        System.out.println("Добавлено " + value + " count = " + count + " isEmpty? " + isEmptyQueue());
     }
 
     public synchronized T poll() {
-        if (queue.peek() == null) {
-            on();
+        if (isEmptyQueue()) {
+            wakeUpThreads();
         }
-        checkConsume(); //while true == sleep
+        ifEmptyQueueThenWait();
         T value = queue.poll();
         count--;
         return value;
