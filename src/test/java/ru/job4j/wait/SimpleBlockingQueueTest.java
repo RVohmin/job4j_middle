@@ -10,7 +10,7 @@ public class SimpleBlockingQueueTest {
         Thread produser = new Thread(
                 () -> {
                     var i = 1;
-                    while (i <= 12) {
+                    while (i <= 11) {
                         queue.offer(i);
                         i++;
                     }
@@ -22,7 +22,7 @@ public class SimpleBlockingQueueTest {
         Thread consumer = new Thread(
                 () -> {
                     var i = 1;
-                    while (i <= 12) {
+                    while (i <= 11) {
                         System.out.println("Получено " + queue.poll());
                         i++;
                     }
