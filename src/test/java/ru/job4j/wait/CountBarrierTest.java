@@ -35,5 +35,4 @@ public class CountBarrierTest {
         master.join();
         slave.join();
     }
-
 }

@@ -11,10 +11,9 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
-
     private final Object monitor = this;
     private int count = 0;
-    boolean flag = true;
+    private boolean flag = true;
 
     public synchronized boolean getPeek() {
         return queue.peek() != null;

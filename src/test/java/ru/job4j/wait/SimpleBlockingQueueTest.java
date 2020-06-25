@@ -28,12 +28,9 @@ public class SimpleBlockingQueueTest {
                     }
                 }, "Потребитель (poll)"
         );
-
         produser.start();
         consumer.start();
         produser.join();
-
         consumer.join();
     }
-
 }
