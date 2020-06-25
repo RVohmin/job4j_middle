@@ -69,6 +69,7 @@ public class SimpleBlockingQueue<T> {
         }
         ifEmptyQueueThenWait();
         T value = queue.poll();
+        System.out.println("Извлечено " + value);
         count--;
         return value;
     }
