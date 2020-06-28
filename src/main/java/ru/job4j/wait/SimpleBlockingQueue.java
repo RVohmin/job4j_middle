@@ -28,7 +28,7 @@ public class SimpleBlockingQueue<T> {
     }
 
     public synchronized void wakeUpThreads() {
-        monitor.notifyAll();
+        monitor.notify();
     }
 
     public synchronized void ifFullQueueThenWait() {
