@@ -90,6 +90,7 @@ public class CacheModelTest {
                 () -> {
                     try {
                         cacheModel.add(model1);
+                        cacheModel.add(new Base(1, 0, "Petr"));
                         cacheModel.add(model3);
                     } catch (OptimisticException e) {
                         optiExc.set(e);

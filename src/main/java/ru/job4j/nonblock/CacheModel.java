@@ -8,7 +8,11 @@ public class CacheModel {
 
     public void add(Base model) {
         if (map.putIfAbsent(model.getId(), model) != null) {
-            throw new OptimisticException("Such Base model existing, use update()");
+            try {
+                throw new OptimisticException("Such Base model existing, use update()");
+            } catch (OptimisticException ex) {
+                ex.getMessage();
+            }
         }
     }
 
