@@ -113,5 +113,6 @@ public class CacheModelTest {
         cacheModel.print();
         assertNull(optiExc.get());
         assertNull(cacheModel.getByID(1));
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 }
