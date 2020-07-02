@@ -2,7 +2,6 @@ package ru.job4j.nonblock;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CacheModel {
     private final Map<Integer, Base> map = new ConcurrentHashMap<>();
@@ -18,13 +17,12 @@ public class CacheModel {
     }
 
     public void update(Base model) {
-        AtomicInteger newVersion = new AtomicInteger(model.getVersion());
-        int oldVersion = map.get(model.getId()).getVersion();
-        if (newVersion.get() != oldVersion) {
-            throw new OptimisticException("Error on update, model versions is differencing");
-        }
         map.computeIfPresent(model.getId(), (key, value) -> {
-            model.setVersion(newVersion.incrementAndGet());
+            int newVersion = model.getVersion();
+            if (!(value.getVersion() == newVersion)) {
+                throw new OptimisticException("Error on update, model versions is differencing");
+            }
+            model.setVersion(++newVersion);
             return model;
         });
     }
