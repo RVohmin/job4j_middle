@@ -23,21 +23,21 @@ public class SimpleBlockingQueue<T> {
     public synchronized void offer(T value) {
         while (queue.size() >= maxSizeQueue) {
             try {
-                this.wait();
+                wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
         queue.offer(value);
-        System.out.println("Добавлено " + value + " size = " + queue.size() + " isEmpty? " + isEmpty());
-        notify();
+//        System.out.println("Добавлено " + value + " size = " + queue.size());
+        notifyAll();
     }
 
     public synchronized T poll() {
         T value;
         while (queue.isEmpty()) {
             try {
-                this.wait();
+                wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -45,8 +45,8 @@ public class SimpleBlockingQueue<T> {
         synchronized (queue) {
             value = queue.poll();
         }
-        notify();
-        System.out.println("извлечено " + value);
+        notifyAll();
+//        System.out.println("извлечено " + value);
         return value;
     }
 }

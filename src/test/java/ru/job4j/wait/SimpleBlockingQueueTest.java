@@ -48,9 +48,6 @@ public class SimpleBlockingQueueTest {
         final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(2);
         Thread producer = new Thread(
                 () -> {
-//                    for (int i = 1; i < 6; i++) {
-//                        queue.offer(i);
-//                    }
                     IntStream.range(1, 6).forEach(queue::offer);
                     System.out.println("Producer is dead");
                 }, "Thread Producer"
@@ -73,7 +70,7 @@ public class SimpleBlockingQueueTest {
         consumer.start();
         producer.join();
         consumer.interrupt();
-        consumer.join();
+//        consumer.join();
         assertEquals(Arrays.asList(1, 2, 3, 4, 5), buffer);
     }
 }
