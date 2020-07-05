@@ -20,13 +20,11 @@ public class ThreadPool {
     }
 
     public void work(Runnable job) {
-        synchronized (blockingQueue) {
-            blockingQueue.offer(job);
-        }
+        blockingQueue.offer(job);
     }
 
     public void shutdown() {
-        for (MyThread thread : threadList) {
+        for (Thread thread : threadList) {
             thread.interrupt();
         }
     }

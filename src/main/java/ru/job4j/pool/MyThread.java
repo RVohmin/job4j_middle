@@ -11,6 +11,8 @@ public class MyThread extends Thread {
 
     @Override
     public void run() {
-        queue.poll().run();
+        while (!Thread.currentThread().isInterrupted()) {
+            queue.poll().run();
+        }
     }
 }
