@@ -14,7 +14,7 @@ public class ParallelSearch {
 
         final Thread consumer = new Thread(
                 () -> {
-                    while (queue.isEmpted() || !Thread.currentThread().isInterrupted()) {
+                    while (queue.isNotEmpty() || !Thread.currentThread().isInterrupted()) {
                         Integer i = queue.poll();
                     }
                 }, "Consumer"
