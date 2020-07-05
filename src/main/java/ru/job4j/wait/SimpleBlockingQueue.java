@@ -16,8 +16,8 @@ public class SimpleBlockingQueue<T> {
         this.maxSizeQueue = maxSizeQueue;
     }
 
-    public synchronized boolean isEmpty() {
-        return queue.isEmpty();
+    public synchronized boolean isEmpted() {
+        return !queue.isEmpty();
     }
 
     public synchronized void offer(T value) {

@@ -55,7 +55,7 @@ public class SimpleBlockingQueueTest {
         producer.start();
         Thread consumer = new Thread(
                 () -> {
-                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                    while (queue.isEmpted() || !Thread.currentThread().isInterrupted()) {
                         try {
                             buffer.add(queue.poll());
                         } catch (Exception e) {
@@ -70,7 +70,6 @@ public class SimpleBlockingQueueTest {
         consumer.start();
         producer.join();
         consumer.interrupt();
-//        consumer.join();
         assertEquals(Arrays.asList(1, 2, 3, 4, 5), buffer);
     }
 }
