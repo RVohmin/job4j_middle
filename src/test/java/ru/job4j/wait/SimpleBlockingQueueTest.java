@@ -16,11 +16,10 @@ public class SimpleBlockingQueueTest {
         Thread produser = new Thread(
                 () -> {
                     var i = 1;
-                    while (i <= 11) {
+                    while (i <= 11 && !Thread.currentThread().isInterrupted()) {
                         queue.offer(i);
                         i++;
                     }
-                    queue.wakeUpThreads();
                     System.out.println("Producer is dead");
                 }, "Производитель (offer)"
         );
@@ -29,7 +28,8 @@ public class SimpleBlockingQueueTest {
                 () -> {
                     var i = 1;
                     while (i <= 11) {
-                        System.out.println("Получено " + queue.poll());
+                        queue.poll();
+//                        System.out.println("Получено " + queue.poll());
                         i++;
                     }
                     System.out.println("Consumer is dead");
@@ -38,30 +38,42 @@ public class SimpleBlockingQueueTest {
         produser.start();
         consumer.start();
         produser.join();
+        consumer.interrupt();
         consumer.join();
     }
 
     @Test
     public void whenFetchAllThenGetIt() throws InterruptedException {
         final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
-        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(3);
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(2);
         Thread producer = new Thread(
                 () -> {
+//                    for (int i = 1; i < 6; i++) {
+//                        queue.offer(i);
+//                    }
                     IntStream.range(1, 6).forEach(queue::offer);
+                    System.out.println("Producer is dead");
                 }, "Thread Producer"
         );
         producer.start();
         Thread consumer = new Thread(
                 () -> {
-                    while (!queue.isEmptyQueue() || !Thread.currentThread().isInterrupted()) {
-                        buffer.add(queue.poll());
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            buffer.add(queue.poll());
+                        } catch (Exception e) {
+                            System.out.println("Исключение типа InterruptedException перехвачено");
+                            Thread.currentThread().interrupt();
+                            e.printStackTrace();
+                        }
                     }
+                    System.out.println("Consumer is dead");
                 }, "Thread Consumer"
         );
         consumer.start();
         producer.join();
         consumer.interrupt();
         consumer.join();
-        assertEquals(buffer, Arrays.asList(1, 2, 3, 4, 5));
+        assertEquals(Arrays.asList(1, 2, 3, 4, 5), buffer);
     }
 }
