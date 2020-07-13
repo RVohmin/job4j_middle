@@ -16,8 +16,8 @@ public class SimpleBlockingQueue<T> {
         this.maxSizeQueue = maxSizeQueue;
     }
 
-    public synchronized boolean isNotEmpty() {
-        return !queue.isEmpty();
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 
     public synchronized void offer(T value) {
@@ -35,16 +35,14 @@ public class SimpleBlockingQueue<T> {
 
     public synchronized T poll() {
         T value;
-        while (queue.isEmpty()) {
+        while (isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        synchronized (queue) {
-            value = queue.poll();
-        }
+        value = queue.poll();
         notifyAll();
 //        System.out.println("извлечено " + value);
         return value;

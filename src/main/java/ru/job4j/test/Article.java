@@ -6,14 +6,12 @@ package ru.job4j.test;
  */
 public class Article {
     public static boolean generateBy(String origin, String line) {
-        boolean result = true;
         String[] lineArray = line.split(" ");
         for (String word : lineArray) {
             if (!origin.contains(word)) {
-                result = false;
-                break;
+                return false;
             }
         }
-        return result;
+        return true;
     }
 }
