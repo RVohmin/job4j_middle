@@ -13,7 +13,7 @@
         function validate() {
             let elements = document.getElementsByTagName("input");
             let placeHolder = document.getElementsByTagName("textarea");
-            for (var i = 0, element; element = elements[i++];) {
+            for (let i = 0, element; element = elements[i++];) {
                 console.log(element);
                 if (element.value === "") {
                     console.log("Please fill field ")
@@ -24,8 +24,41 @@
                 alert("Заполните поле " + placeHolder[0].placeholder);
             }
         }
-    </script>
 
+        function addEmptyRow(id) {
+            let table = document.getElementById(id);
+            let tbody = table.getElementsByTagName("TBODY")[0];
+            let row = document.createElement("TR");
+            let td1 = document.createElement("TD");
+            let td2 = document.createElement("TD");
+            let td3 = document.createElement("TD");
+            let td4 = document.createElement("TD");
+            row.appendChild(td1);
+            row.appendChild(td2);
+            row.appendChild(td3);
+            row.appendChild(td4);
+            tbody.appendChild(row);
+        }
+
+        function addRow() {
+            let name = document.getElementById("firstName").value;
+            let secondName = document.getElementById("secondName").value;
+            let gender = document.querySelector('input[name="gridRadios"]:checked').value;
+            let description = document.getElementById('description').value;
+
+            let tableRef = document.getElementById('table').getElementsByTagName('tbody')[0];
+            let newRow = tableRef.insertRow(tableRef.rows.length);
+            let newCellName = newRow.insertCell(0);
+            let newCellFamily = newRow.insertCell(1);
+            let newCellGender = newRow.insertCell(2);
+            let newCellDescr = newRow.insertCell(3);
+            let newText = document.createTextNode(name);
+            newCellName.appendChild(newText);
+            newCellFamily.appendChild(document.createTextNode(secondName));
+            newCellGender.appendChild(document.createTextNode(gender));
+            newCellDescr.appendChild((document.createTextNode(description)));
+        }
+    </script>
     <title>Hello, world!</title>
 </head>
 
@@ -49,14 +82,14 @@
                     <div class="col-sm-10">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"
-                                   value="option1" checked>
+                                   value="Male" checked>
                             <label class="form-check-label" for="gridRadios1">
                                 Male
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"
-                                   value="option2">
+                                   value="Female">
                             <label class="form-check-label" for="gridRadios2">
                                 Female
                             </label>
@@ -67,8 +100,8 @@
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="exampleFormControlTextarea1">Desription</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                <label for="description">Desription</label>
+                <textarea class="form-control" id="description" rows="3"
                           placeholder="Описание"></textarea>
             </div>
         </div>
@@ -76,6 +109,11 @@
             <div class="form-group row">
                 <div class="col-sm-10">
                     <button type="submit" class="btn btn-primary" onclick="return validate();">Submit</button>
+                    <button type="submit" class="btn btn-primary" onclick="addEmptyRow('table'); return false;">Add
+                        Empty Row
+                    </button>
+                    <button type="submit" class="btn btn-primary" onclick="addRow('table'); return false;">Add Row
+                    </button>
                 </div>
             </div>
         </div>
@@ -83,7 +121,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="width: 40%">
+<table id="table" class="table table-bordered" style="width: 40%">
     <thead>
     <tr>
         <th>Firstname</th>
