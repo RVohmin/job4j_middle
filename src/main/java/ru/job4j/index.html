@@ -6,23 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            let elements = document.getElementsByTagName("input");
+            let placeHolder = document.getElementsByTagName("textarea");
+            for (var i = 0, element; element = elements[i++];) {
+                console.log(element);
+                if (element.value === "") {
+                    console.log("Please fill field ")
+                    alert("Заполните поле " + element.placeholder);
+                }
+            }
+            if (placeHolder[0].value === "") {
+                alert("Заполните поле " + placeHolder[0].placeholder);
+            }
+        }
+    </script>
 
     <title>Hello, world!</title>
 </head>
 
 <body>
-<form style="width: 40%">
+<form style="width: 40%" id="form">
     <br>
     <br>
     <div class="col">
         <div class="col">
-            <input type="text" class="form-control" placeholder="Имя">
+            <input type="text" class="form-control" placeholder="Имя" id="firstName">
         </div>
         <br>
         <div class="col">
-            <input type="text" class="form-control" placeholder="Фамилия">
+            <input type="text" class="form-control" placeholder="Фамилия" id="secondName">
         </div>
         <br>
         <div class="col">
@@ -58,7 +75,7 @@
         <div class="col">
             <div class="form-group row">
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">Submit</button>
                 </div>
             </div>
         </div>
