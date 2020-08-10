@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/RVohmin/job4j_middle/branch/master/graph/badge.svg)](https://codecov.io/gh/RVohmin/job4j_middle)
-[![Build Status](https://travis-ci.org/RVohmin/job4j_design.svg?branch=master)](https://travis-ci.org/RVohmin/job4j_design)
+[![Build Status](https://travis-ci.org/RVohmin/job4j_middle.svg?branch=master)](https://travis-ci.org/RVohmin/job4j_middle)
 # Многопоточность
 * Синхронные и асинхронные операции
 * Синхронизация ресурсов
