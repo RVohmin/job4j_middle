@@ -6,7 +6,7 @@ public class ThreadPoolTest {
     @Test
     public void threadPoolTest() {
         ThreadPool pool = new ThreadPool();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 100; i++) {
             pool.work(() -> System.out.println(Thread.currentThread().getName() + " Worked"));
         }
         pool.shutdown();
